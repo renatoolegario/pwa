@@ -8,17 +8,40 @@ const MapWithPolygon = () => {
     mapboxgl.accessToken = process.env.NEXT_PUBLIC_REACT_APP_MAPBOX_TOKEN;
     const map = new mapboxgl.Map({
       container: 'map',
-      style: 'mapbox://styles/mapbox/light-v11',
+      style: 'mapbox://styles/mapbox/satellite-v9',
       center: [-47.4, -19.4], // Defina o centro do mapa
       zoom: 12 // Defina o nível de zoom do mapa
     });
 
+    let popup = new mapboxgl.Popup({
+      closeButton: false,
+      closeOnClick: false
+    });
+
     map.on('load', () => {
+      let cont = 0;
       // Iterar sobre os recursos (features) no arquivo JSON
       data.features.forEach(feature => {
         // Adicionar cada polígono como uma camada ao mapa
+        cont = cont + 1;
+        const cores = [
+          '#FF5733', // Cor 1
+          '#3366FF', // Cor 2
+          '#1E8449', // Cor 3
+          '#8E44AD', // Cor 4
+          '#16A085', // Cor 5
+          '#34495E', // Cor 6
+          '#FF6347', // Cor 7
+          '#FF4500', // Cor 8
+          '#FF1493', // Cor 9
+          '#F4D03F'  // Cor 10
+        ];
+        
+        if(cont == 10){
+          cont = 1;
+        }
         map.addLayer({
-          'id': feature.properties.NOME_FAZEN + feature.properties.TALHAO,
+          'id': feature.properties.DESC_TALHA,
           'type': 'fill',
           'source': {
             'type': 'geojson',
@@ -29,14 +52,17 @@ const MapWithPolygon = () => {
           },
           'layout': {},
           'paint': {
-            'fill-color': '#0080ff',
+            'fill-color': cores[cont],
             'fill-opacity': 0.5
+          },
+          'metadata': {
+            'description': `Talhão: ${feature.properties.DESC_TALHA},<br /> Área: ${feature.properties.AREA_TOTAL}`
           }
         });
 
         // Adicionar um contorno preto ao redor do polígono
         map.addLayer({
-          'id': feature.properties.NOME_FAZEN + feature.properties.TALHAO + '_outline',
+          'id': feature.properties.DESC_TALHA + '_outline',
           'type': 'line',
           'source': {
             'type': 'geojson',
@@ -51,7 +77,43 @@ const MapWithPolygon = () => {
             'line-width': 3
           }
         });
+        
       });
+
+      // Adicionar evento de mousemove
+      // Adicionar evento de mousemove
+      map.on('mousemove', (e) => {
+        const features = map.queryRenderedFeatures(e.point);
+        const talhao = features.length > 0 ? features[0] : null;
+        
+        // Verificar se um talhão foi encontrado
+        if (talhao) {
+          const talhaoNome = talhao.layer.id.split('_')[0];
+          const layerMetadata = map.getLayer(talhao.layer.id).metadata;
+          
+          // Exibir ou ocultar o popup conforme necessário
+          if (talhaoNome && layerMetadata) {
+            const description = layerMetadata.description || 'N/A';
+            popup.setLngLat(e.lngLat).setHTML(`
+              <div>${talhaoNome}</div>
+              <div>${description}</div>
+            `).addTo(map);
+          } else {
+            popup.remove();
+          }
+        } else {
+          popup.remove();
+        }
+      });
+
+
+
+      // Adicionar evento de mouseleave
+      map.on('mouseleave', () => {
+        popup.remove();
+      });
+
+
     });
 
     // Limpeza do mapa quando o componente é desmontado
