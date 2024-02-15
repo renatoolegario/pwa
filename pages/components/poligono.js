@@ -18,6 +18,11 @@ const MapWithPolygon = () => {
       closeOnClick: false
     });
 
+    // Adicionar o marcador da posição atual da pessoa
+    let marker = new mapboxgl.Marker({
+      color: '#FF5733' // Cor do marcador
+    });
+
     map.on('load', () => {
       let cont = 0;
       // Iterar sobre os recursos (features) no arquivo JSON
@@ -81,7 +86,6 @@ const MapWithPolygon = () => {
       });
 
       // Adicionar evento de mousemove
-      // Adicionar evento de mousemove
       map.on('mousemove', (e) => {
         const features = map.queryRenderedFeatures(e.point);
         const talhao = features.length > 0 ? features[0] : null;
@@ -106,14 +110,19 @@ const MapWithPolygon = () => {
         }
       });
 
-
-
       // Adicionar evento de mouseleave
       map.on('mouseleave', () => {
         popup.remove();
       });
 
+    });
 
+    // Atualizar a posição do marcador quando a localização da pessoa mudar
+    navigator.geolocation.watchPosition((position) => {
+      const { latitude, longitude } = position.coords;
+      
+      marker.setLngLat([longitude, latitude]);
+      marker.addTo(map); // Adiciona o marcador ao mapa
     });
 
     // Limpeza do mapa quando o componente é desmontado
