@@ -6,8 +6,7 @@
     "scripts": {
         "dev": "next dev",
         "test": "jest",
-        "test:watch": "jest --watch",
-        "build": "next build && workbox generateSW workbox-config.js "
+        "test:watch": "jest --watch"
     },
     "author": "",
     "license": "MIT",
