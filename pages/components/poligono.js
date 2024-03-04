@@ -29,7 +29,7 @@ const MapWithPolygon = () => {
       data.features.forEach(feature => {
         // Adicionar cada polígono como uma camada ao mapa
         cont = cont + 1;
-        const novasCores = [
+        const cores = [
           '#FF5733', // Cor 1
           '#3366FF', // Cor 2
           '#1E8449', // Cor 3
@@ -51,9 +51,7 @@ const MapWithPolygon = () => {
           '#C0392B', // Cor 19
           '#2980B9'  // Cor 20
         ];
-        
-        console.log(novasCores);
-        
+                
         
         if(cont == 20){
           cont = 1;
