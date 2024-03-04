@@ -4,10 +4,12 @@
     "description": "",
     "main": "index.js",
     "scripts": {
-        "dev": "next dev",
+        "dev-build": "next build && next dev",
+        "dev": "npm run dev-build",
         "test": "jest",
-        "test:watch": "jest --watch"
-    },
+        "test:watch": "jest --watch",
+        "build": "next build"
+      },
     "author": "",
     "license": "MIT",
     "dependencies": {
