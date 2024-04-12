@@ -4,7 +4,7 @@ export default function Home() {
   return (
     <div>
       <h1>Desenhar Polígono</h1>
-      
+      <MapWithPolygon />
     </div>
   );
 }
