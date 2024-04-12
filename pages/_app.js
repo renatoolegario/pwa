@@ -1,15 +1,9 @@
+// pages/_app.js
 import React from 'react';
-import Head from 'next/head';
+import '../tailwind.css'; // Importe seu arquivo CSS global aqui
 
 function MyApp({ Component, pageProps }) {
-  return (
-    <React.Fragment>
-      <Head>
-        <title>Your App Title</title> <meta name="viewport" content="width=device-width, initial-scale=1" />
-      </Head>
-      <Component {...pageProps} />
-    </React.Fragment>
-  );
+  return (<Component {...pageProps} />);
 }
 
 export default MyApp;
