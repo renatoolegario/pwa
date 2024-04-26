@@ -1,10 +1,13 @@
-import MapWithPolygon from './components/poligono';
+import React from 'react';
+import MapView from './mapView';
 
-export default function Home() {
+const Home = () => {
   return (
-    <div>
-      <h1>Desenhar Polígono</h1>
-      <MapWithPolygon />
+    <div className="container mx-auto">
+      <h1>Meu PWA com Mapa</h1>
+      <MapView />
     </div>
   );
-}
+};
+
+export default Home;
